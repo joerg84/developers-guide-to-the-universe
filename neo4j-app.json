@@ -14,6 +14,7 @@
         {
            "hostPort":0,
            "containerPort":7474,
+           "servicePort": 10001,
            "name":"http",
            "protocol":"tcp",
             "labels":{
@@ -38,23 +39,23 @@
               "VIP_0":"7.4.7.4:7687"
             }
         }
-      ],
-      "volumes":[  
-        {  
-          "containerPath":"data",
-          "mode":"RW",
-          "persistent":{  
-            "type":"root",
-            "size":8000
-          }
-        },
-        {  
-          "containerPath":"/data",
-          "hostPath":"data",
-          "mode":"RW"
-        }
       ]
-    }
+    },
+    "volumes":[  
+      {  
+        "containerPath":"data",
+        "mode":"RW",
+        "persistent":{  
+          "type":"root",
+          "size":8000
+        }
+      },
+      {  
+        "containerPath":"/data",
+        "hostPath":"data",
+        "mode":"RW"
+      }
+    ]
   },
   "env":{  
     "NEO4J_AUTH":"neo4j/dcos",
@@ -69,5 +70,17 @@
       "intervalSeconds":10,
       "maxConsecutiveFailures":10
     }
-  ]
+  ],
+  "updateStrategy": {
+    "maximumOverCapacity": 0,
+    "minimumHealthCapacity": 0
+  },
+  "residency": {
+    "relaunchEscalationTimeoutSeconds": 10,
+    "taskLostBehavior": "WAIT_FOREVER"
+  },
+ "labels":{
+    "HAPROXY_0_VHOST":"your.public.elb.amazonaws.com",
+    "HAPROXY_GROUP":"external"
+  }
 }
